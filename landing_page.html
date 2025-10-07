@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnWise - Smart Learning Hub</title>
+<style>
+  /* Reset and Base Styles */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    background: #f9fafc;
+    color: #333;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  header {
+    background: #fff;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  header .logo {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: #1abc9c;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 15px;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+
+  nav a:hover {
+    color: #1abc9c;
+  }
+
+  .auth-buttons button {
+    background: #1abc9c;
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .auth-buttons button:hover {
+    background: #16a085;
+  }
+
+  /* Hero Section */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 120px 20px;
+    background: linear-gradient(120deg, #1abc9c, #16a085);
+    color: white;
+  }
+
+  .hero h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+  }
+
+  .hero p {
+    font-size: 1.2em;
+    max-width: 700px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+
+  .hero button {
+    background: white;
+    color: #1abc9c;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1em;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s;
+  }
+
+  .hero button:hover {
+    transform: scale(1.05);
+  }
+
+  /* Features Section */
+  .features {
+    padding: 80px 60px;
+    text-align: center;
+    background: #fff;
+  }
+
+  .features h2 {
+    font-size: 2em;
+    color: #1abc9c;
+    margin-bottom: 50px;
+  }
+
+  .feature-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .card {
+    background: #f9fafc;
+    border-radius: 12px;
+    padding: 30px;
+    width: 280px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card h3 {
+    color: #1abc9c;
+    margin-bottom: 15px;
+  }
+
+  /* CTA Section */
+  .cta {
+    background: #1abc9c;
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .cta h2 {
+    font-size: 2.2em;
+    margin-bottom: 20px;
+  }
+
+  .cta button {
+    background: white;
+    color: #1abc9c;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s;
+  }
+
+  .cta button:hover {
+    transform: scale(1.05);
+  }
+
+  /* Footer */
+  footer {
+    background: #111;
+    color: #bbb;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.9em;
+  }
+
+  /* Modals */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  .modal-content {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+  }
+
+  .modal-content h2 {
+    color: #1abc9c;
+    margin-bottom: 20px;
+  }
+
+  .modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+  }
+
+  .modal-content button {
+    background: #1abc9c;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .modal-content button:hover {
+    background: #16a085;
+  }
+
+  .modal .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.3em;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .switch-link {
+    margin-top: 15px;
+    display: block;
+    color: #1abc9c;
+    cursor: pointer;
+    font-size: 0.9em;
+  }
+
+  @media (max-width: 768px) {
+    header {
+      padding: 15px 25px;
+    }
+    .feature-cards {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">LearnWise</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Dashboard</a>
+      <a href="#">Subjects</a>
+      <a href="#">Lessons</a>
+    </nav>
+    <div class="auth-buttons">
+      <button onclick="openModal('loginModal')">Login</button>
+      <button onclick="openModal('signupModal')">Sign Up</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Welcome to LearnWise</h1>
+    <p>Your smart way to create, manage, and explore interactive lessons. Learn at your own pace and share knowledge effortlessly.</p>
+    <button> <a href="teacher_interface.html">Get Started</a></button> 
+  </section>
+
+  <section class="features">
+    <h2>Why Choose LearnWise?</h2>
+    <div class="feature-cards">
+      <div class="card">
+        <h3>Interactive Dashboard</h3>
+        <p>Manage your lessons and progress with a clean, user-friendly interface built for productivity.</p>
+      </div>
+      <div class="card">
+        <h3>Smart Lessons</h3>
+        <p>Each lesson is designed to be engaging — complete with slides, images, and quizzes.</p>
+      </div>
+      <div class="card">
+        <h3>Easy Collaboration</h3>
+        <p>Invite classmates or share your work easily to make learning more fun and effective.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Ready to Start Your Learning Journey?</h2>
+    <button onclick="openModal('authModal')">Get Started</button>
+
+  </section>
+
+  <footer>
+    © 2025 LearnWise. All Rights Reserved.
+  </footer>
+
+ <!-- Combined Auth Modal -->
+  <div class="modal" id="authModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('authModal')">&times;</span>
+      <h2>Welcome to EduPath</h2>
+      <p>Choose how you want to continue</p>
+      <button onclick="switchTo('login')">Login</button>
+      <button onclick="switchTo('signup')">Sign Up</button>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('loginModal')">&times;</span>
+      <h2>Login</h2>
+      <input type="text" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button onclick="login()">Login</button>
+      <a class="toggle-link" onclick="switchTo('signup')">Don't have an account? Sign Up</a>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div class="modal" id="signupModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('signupModal')">&times;</span>
+      <h2>Create Account</h2>
+      <input type="text" id="signupName" placeholder="Full Name" required>
+      <input type="email" id="signupEmail" placeholder="Email" required>
+      <input type="password" id="signupPassword" placeholder="Password" required>
+      <button onclick="signup()">Sign Up</button>
+      <a class="toggle-link" onclick="switchTo('login')">Already have an account? Login</a>
+    </div>
+  </div>
+
+
+ <script>
+  // ✅ Universal Modal Handling
+  function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+  }
+
+  // ✅ Close modal when clicking outside
+  window.onclick = function(e) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+  }
+
+  // ✅ Switch between login, signup, and auth modals
+  function switchTo(mode) {
+    closeModal('authModal');
+    closeModal('loginModal');
+    closeModal('signupModal');
+    if (mode === 'login') openModal('loginModal');
+    if (mode === 'signup') openModal('signupModal');
+  }
+
+  // ✅ Simulated login / signup flow
+  function login() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPassword').value.trim();
+    if (email && pass) {
+      alert('Login successful!');
+      window.location.href = 'dashboard.html';
+    } else {
+      alert('Please fill out all fields.');
+    }
+  }
+
+  function signup() {
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const pass = document.getElementById('signupPassword').value.trim();
+    if (name && email && pass) {
+      alert('Account created successfully!');
+      window.location.href = 'dashboard.html';
+    } else {
+      alert('Please fill out all fields.');
+    }
+  }
+</script>

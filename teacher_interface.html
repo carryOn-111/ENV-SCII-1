@@ -8,10 +8,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f6fa;
-      color: #333;
+      background: linear-gradient(180deg, #f5f6fa 0%, #e3e5f1 100%);
+      color: #2f3640;
+      min-height: 100vh;
     }
 
+    /* Header */
     header {
       display: flex;
       justify-content: space-between;
@@ -19,155 +21,167 @@
       background: #2f3640;
       color: white;
       padding: 15px 40px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     }
-    header h1 { font-size: 24px; letter-spacing: 1px; }
+    header h1 {
+      font-size: 26px;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
     nav a {
-      color: #dcdde1; text-decoration: none; margin-left: 25px;
-      font-weight: 500; transition: 0.3s;
+      color: #dcdde1;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 500;
+      transition: 0.3s;
     }
-    nav a:hover { color: #00a8ff; }
+    nav a:hover {
+      color: #00a8ff;
+    }
 
+    /* Hero Section */
     .hero {
       text-align: center;
       padding: 60px 20px;
-      background: linear-gradient(120deg, #00a8ff, #9c88ff);
+     background: linear-gradient(120deg, #1abc9c, #16a085);
       color: white;
     }
-    .hero h2 { font-size: 36px; margin-bottom: 15px; }
-    .hero p { font-size: 18px; max-width: 600px; margin: 0 auto; }
+    .hero h2 { font-size: 38px; margin-bottom: 15px; font-weight: 600; }
+    .hero p { font-size: 18px; max-width: 650px; margin: 0 auto; opacity: 0.95; }
 
-    .subjects-section { padding: 40px 60px; }
+    /* Subjects Section */
+    .subjects-section {
+      padding: 50px 60px;
+    }
     .subjects-header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
     }
-    .subjects-header h3 { font-size: 24px; color: #2f3640; }
+    .subjects-header h3 {
+      font-size: 26px; color: #2f3640; font-weight: 600;
+    }
 
     .subjects-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
     }
 
     .subject-card {
       background: white;
-      border-radius: 15px;
+      border-radius: 18px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      padding: 20px;
+      padding: 25px;
       transition: 0.3s;
-      cursor: pointer;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      border-top: 5px solid #00a8ff;
     }
-
     .subject-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.15);
     }
-
-    .subject-card h4 { margin-bottom: 10px; color: #273c75; }
-    .subject-card p { flex-grow: 1; color: #555; }
+    .subject-card h4 { margin-bottom: 10px; color: #273c75; font-size: 20px; }
+    .subject-card p { flex-grow: 1; color: #555; margin-bottom: 15px; }
 
     .add-subject-btn {
-      background: #00a8ff; color: white; border: none;
-      border-radius: 30px; padding: 12px 24px; cursor: pointer;
-      font-weight: bold; font-size: 16px; transition: 0.3s;
+      background: linear-gradient(120deg, #00a8ff, #9c88ff);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 26px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: 0.3s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
-    .add-subject-btn:hover { background: #0097e6; }
+    .add-subject-btn:hover {
+      background: linear-gradient(120deg, #0097e6, #8c7ae6);
+      transform: scale(1.05);
+    }
 
+    /* Floating Button */
     .floating-btn {
       position: fixed; bottom: 30px; right: 30px;
-      background: #00a8ff; color: white; border: none;
-      border-radius: 50%; width: 60px; height: 60px;
-      font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      background: linear-gradient(120deg, #00a8ff, #9c88ff);
+      color: white; border: none; border-radius: 50%;
+      width: 65px; height: 65px; font-size: 32px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
       cursor: pointer; transition: 0.3s;
     }
-    .floating-btn:hover { background: #0097e6; transform: scale(1.05); }
+    .floating-btn:hover {
+      transform: scale(1.1);
+      background: linear-gradient(120deg, #0097e6, #8c7ae6);
+    }
 
-    /* Reused Modal Base */
+    /* Modal Base */
     .modal {
       display: none; position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%; background: rgba(0,0,0,0.6);
-      justify-content: center; align-items: center; z-index: 1000;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center; align-items: center;
+      z-index: 1000;
     }
     .modal-content {
-      background: white; width: 90%; max-width: 500px;
-      border-radius: 12px; padding: 25px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      background: white;
+      width: 90%; max-width: 550px;
+      border-radius: 15px; padding: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      position: relative;
     }
 
     /* Add Subject Modal */
-    #subjectModal .modal-content { text-align: center; }
     #subjectModal input, #subjectModal textarea {
       width: 100%; margin-top: 15px; padding: 10px;
       border: 1px solid #ccc; border-radius: 8px;
     }
     #subjectModal button {
-      margin-top: 20px; background: #00a8ff; color: white;
-      border: none; border-radius: 8px; padding: 10px 18px;
-      cursor: pointer; font-weight: 600; transition: 0.3s;
+      margin-top: 20px;
+      background: linear-gradient(120deg, #00a8ff, #9c88ff);
+      color: white; border: none; border-radius: 8px;
+      padding: 10px 18px; cursor: pointer;
+      font-weight: 600; transition: 0.3s;
     }
-    #subjectModal button:hover { background: #0097e6; }
+    #subjectModal button:hover {
+      background: linear-gradient(120deg, #0097e6, #8c7ae6);
+    }
 
-    /* Lesson Modal Styles */
-    #lessonModal .modal-content { position: relative; }
+    /* Lesson Modal */
     #lessonModal h3 { margin-bottom: 15px; color: #273c75; }
     #lessonModal input, #lessonModal textarea {
       width: 100%; padding: 10px; margin: 8px 0;
       border: 1px solid #ccc; border-radius: 5px;
     }
-
-    .cards-container {
-      margin: 15px 0; border: 1px solid #ddd;
-      border-radius: 8px; overflow: hidden;
-    }
-    .card {
-      display: none; padding: 15px; background: #f8f9fa;
-    }
+    .card { display: none; padding: 15px; background: #f8f9fa; border-radius: 10px; }
     .card.active { display: block; }
     .card img {
       display: none; width: 100%; height: auto;
       border-radius: 8px; margin-top: 10px; object-fit: cover;
     }
-
     .card-navigation {
       display: flex; justify-content: space-between; margin-top: 10px;
     }
     .card-navigation button {
-      background: #00a8ff; color: white;
-      border: none; padding: 8px 14px;
+      background: linear-gradient(120deg, #00a8ff, #9c88ff);
+      color: white; border: none; padding: 8px 14px;
       border-radius: 6px; cursor: pointer;
       transition: 0.3s;
     }
-    .card-navigation button:hover { background: #0097e6; }
-
-    #addCardBtn {
-      margin-top: 15px; background: #00a8ff;
-      color: white; border: none; border-radius: 6px;
-      padding: 8px 14px; cursor: pointer;
+    .card-navigation button:hover {
+      background: linear-gradient(120deg, #0097e6, #8c7ae6);
     }
-    #addCardBtn:hover { background: #0097e6; }
-
-    .cards-indicators {
-      display: flex; justify-content: center; margin-top: 10px;
-    }
-    .indicator {
-      width: 10px; height: 10px; margin: 0 4px;
-      background: #ccc; border-radius: 50%;
-    }
-    .indicator.active { background: #00a8ff; }
 
     .close {
-      position: absolute; top: 10px; right: 15px;
-      font-size: 20px; cursor: pointer; color: #aaa;
+      position: absolute; top: 12px; right: 18px;
+      font-size: 22px; cursor: pointer; color: #888;
     }
     .close:hover { color: #000; }
 
     @media (max-width: 600px) {
-      .subjects-section { padding: 20px; }
-      header { flex-direction: column; text-align: center; }
+      .subjects-section { padding: 25px; }
+      header { flex-direction: column; text-align: center; padding: 20px; }
     }
   </style>
 </head>
@@ -177,7 +191,7 @@
     <h1>EduPath</h1>
     <nav>
       <a href="#">Home</a>
-      <a href="#">Subjects</a>
+      <a href="subject.html">Subjects</a>
       <a href="dashboard.html">Dashboard</a>
       <a href="#">Profile</a>
     </nav>
@@ -201,11 +215,11 @@
   <!-- Add Subject Modal -->
   <div id="subjectModal" class="modal">
     <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
       <h3>Add New Subject</h3>
       <input type="text" id="subjectTitle" placeholder="Enter subject name">
       <textarea id="subjectDesc" rows="3" placeholder="Enter short description"></textarea>
       <button onclick="addSubject()">Save Subject</button>
-      <button onclick="closeModal()" style="background:#ccc; color:#333;">Cancel</button>
     </div>
   </div>
 
@@ -232,10 +246,10 @@
         <button id="nextCardBtn" onclick="nextCard()">Next &gt;</button>
       </div>
 
-      <button id="addCardBtn" onclick="addNewCard()">+ Add Another Card</button>
+      <button id="addCardBtn" class="add-subject-btn" style="margin-top:15px;">+ Add Another Card</button>
       <div class="cards-indicators" id="indicatorsContainer"></div>
 
-      <button style="margin-top:20px;background:#00a8ff;color:white;border:none;border-radius:8px;padding:10px 18px;cursor:pointer;">Save Lesson</button>
+      <button class="add-subject-btn" style="margin-top:25px;">Save Lesson</button>
     </div>
   </div>
 
@@ -268,7 +282,7 @@
         <div class="subject-card">
           <h4>${s.title}</h4>
           <p>${s.desc || 'No description yet.'}</p>
-          <button class="add-subject-btn" onclick="openLessonModal(${i})" style="margin-top:15px;">View Lessons</button>
+          <button class="add-subject-btn" onclick="openLessonModal(${i})" style="margin-top:10px;">View Lessons</button>
         </div>
       `).join('');
     }
