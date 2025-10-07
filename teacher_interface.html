@@ -223,6 +223,27 @@
     </div>
   </div>
 
+  <!-- Add this inside your <section class="subjects-section"> or create a new section after subjects -->
+<section class="students-section" style="padding:50px 60px;">
+  <div class="students-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;">
+    <h3>Students</h3>
+    <button class="add-subject-btn" onclick="openStudentModal()">+ Add Student</button>
+  </div>
+  <div id="studentsContainer" class="subjects-container"></div>
+</section>
+
+<!-- Student Modal -->
+<div id="studentModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeStudentModal()">&times;</span>
+    <h3>Add New Student</h3>
+    <input type="text" id="studentName" placeholder="Student Name">
+    <input type="text" id="studentGrade" placeholder="Grade/Class">
+    <button onclick="addStudent()">Save Student</button>
+  </div>
+</div>
+
+
   <!-- Lesson Modal -->
   <div id="lessonModal" class="modal">
     <div class="modal-content">
@@ -254,6 +275,46 @@
   </div>
 
   <script>
+    // Students array
+const students = [];
+
+// Open / Close Student Modal
+function openStudentModal() {
+  document.getElementById('studentModal').style.display = 'flex';
+}
+function closeStudentModal() {
+  document.getElementById('studentModal').style.display = 'none';
+}
+
+// Add Student
+function addStudent() {
+  const name = document.getElementById('studentName').value.trim();
+  const grade = document.getElementById('studentGrade').value.trim();
+  if (!name) return alert("Please enter the student's name.");
+  students.push({ name, grade });
+  renderStudents();
+  closeStudentModal();
+  // Clear input fields
+  document.getElementById('studentName').value = '';
+  document.getElementById('studentGrade').value = '';
+}
+
+// Render students in the Students section
+function renderStudents() {
+  const container = document.getElementById('studentsContainer');
+  container.innerHTML = students.map(s => `
+    <div class="subject-card">
+      <h4>${s.name}</h4>
+      <p>${s.grade || 'No grade assigned'}</p>
+    </div>
+  `).join('');
+}
+
+// Close student modal when clicking outside
+window.addEventListener('click', (e) => {
+  if (e.target.id === 'studentModal') closeStudentModal();
+});
+
     const subjects = [];
     let currentCardIndex = 0;
     let cards = [];
