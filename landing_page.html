@@ -1,405 +1,475 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LearnWise - Smart Learning Hub</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LearnWise — Eco Learning Hub</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  /* Reset and Base Styles */
+  /* === GLOBAL STYLES === */
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
-    background: #f9fafc;
-    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    background-color: #0a2e0a;
     overflow-x: hidden;
   }
 
-  /* Header */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* === NAVBAR === */
   header {
-    background: #fff;
-    padding: 20px 60px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    padding: 15px 60px;
   }
 
-  header .logo {
-    font-size: 1.6em;
-    font-weight: 700;
-    color: #1abc9c;
+  header h1 {
+    font-size: 1.8rem;
+    color: #00ff88;
   }
 
-  nav a {
-    text-decoration: none;
-    color: #333;
-    margin: 0 15px;
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+  }
+
+  nav ul li a, .nav-btn {
     font-weight: 500;
     transition: color 0.3s;
-  }
-
-  nav a:hover {
-    color: #1abc9c;
-  }
-
-  .auth-buttons button {
-    background: #1abc9c;
-    border: none;
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 6px;
-    margin-left: 10px;
     cursor: pointer;
-    transition: background 0.3s;
   }
 
-  .auth-buttons button:hover {
-    background: #16a085;
+  nav ul li a:hover, .nav-btn:hover {
+    color: #00ff88;
   }
 
-  /* Hero Section */
+  /* === HERO === */
   .hero {
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 120px 20px;
-    background: linear-gradient(120deg, #1abc9c, #16a085);
-    color: white;
+    backdrop-filter: blur(5px);
+    padding: 0 20px;
   }
 
-  .hero h1 {
-    font-size: 3em;
-    margin-bottom: 15px;
+  .hero h2 {
+    font-size: 3rem;
+    max-width: 800px;
   }
 
   .hero p {
-    font-size: 1.2em;
-    max-width: 700px;
-    line-height: 1.6;
-    margin-bottom: 25px;
+    font-size: 1.2rem;
+    margin: 20px 0;
   }
 
-  .hero button {
-    background: white;
-    color: #1abc9c;
-    border: none;
-    padding: 12px 24px;
-    font-size: 1em;
+  .hero .btn {
+    background: #00ff88;
+    color: #000;
+    padding: 12px 28px;
     border-radius: 8px;
+    font-weight: bold;
+    transition: transform 0.3s;
     cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.2s;
   }
 
-  .hero button:hover {
-    transform: scale(1.05);
+  .hero .btn:hover {
+    transform: scale(1.1);
   }
 
-  /* Features Section */
+  /* === FEATURES === */
   .features {
-    padding: 80px 60px;
-    text-align: center;
-    background: #fff;
+    background: url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+    padding: 120px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(3px);
   }
 
   .features h2 {
-    font-size: 2em;
-    color: #1abc9c;
+    font-size: 2.5rem;
     margin-bottom: 50px;
   }
 
   .feature-cards {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 30px;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
   }
 
   .card {
-    background: #f9fafc;
-    border-radius: 12px;
-    padding: 30px;
-    width: 280px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-  }
-
-  .card:hover {
-    transform: translateY(-5px);
+    width: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 60px;
+    border-radius: 16px;
+    text-align: center;
   }
 
   .card h3 {
-    color: #1abc9c;
-    margin-bottom: 15px;
+    color: #00ff88;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
   }
 
-  /* CTA Section */
-  .cta {
-    background: #1abc9c;
-    color: white;
+  .card p {
+    font-size: 1.1rem;
+  }
+
+  /* === ABOUT SECTION === */
+  .about {
+    background: #062406;
+    padding: 100px 20px;
     text-align: center;
-    padding: 80px 20px;
   }
 
-  .cta h2 {
-    font-size: 2.2em;
+  .about h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #00ff88;
+  }
+
+  .about p {
+    max-width: 800px;
+    margin: auto;
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+
+  /* === TESTIMONIALS === */
+  .testimonials {
+    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+    padding: 120px 20px;
+    text-align: center;
+    backdrop-filter: blur(3px);
+  }
+
+  .testimonials h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #00ff88;
+  }
+
+  .testimonial-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .testimonial {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 320px;
+  }
+
+  .testimonial p {
+    font-style: italic;
+  }
+
+  .testimonial h4 {
+    margin-top: 15px;
+    color: #00ff88;
+  }
+
+  /* === PRICING === */
+  .pricing {
+    background: #073407;
+    padding: 100px 20px;
+    text-align: center;
+  }
+
+  .pricing h2 {
+    font-size: 2.5rem;
+    color: #00ff88;
+    margin-bottom: 50px;
+  }
+
+  .pricing-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .plan {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 40px;
+    width: 300px;
+  }
+
+  .plan h3 {
+    margin-bottom: 10px;
+  }
+
+  .plan p {
+    font-size: 1rem;
     margin-bottom: 20px;
   }
 
-  .cta button {
-    background: white;
-    color: #1abc9c;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.2s;
+  .plan .btn {
+    background: #00ff88;
+    color: #000;
+    padding: 10px 24px;
+    border-radius: 6px;
   }
 
-  .cta button:hover {
-    transform: scale(1.05);
-  }
-
-  /* Footer */
+  /* === FOOTER === */
   footer {
-    background: #111;
-    color: #bbb;
+    background: #031503;
     text-align: center;
-    padding: 20px 0;
-    font-size: 0.9em;
+    padding: 30px;
+    font-size: 0.9rem;
   }
 
-  /* Modals */
+  footer a {
+    color: #00ff88;
+  }
+
+  /* === MODALS === */
   .modal {
     display: none;
     position: fixed;
-    z-index: 2000;
+    z-index: 200;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.7);
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
   }
 
   .modal-content {
-    background: #fff;
-    padding: 40px 30px;
-    border-radius: 10px;
-    width: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 40px;
+    width: 90%;
     max-width: 400px;
     text-align: center;
-    position: relative;
   }
 
   .modal-content h2 {
-    color: #1abc9c;
     margin-bottom: 20px;
+    color: #00ff88;
   }
 
   .modal-content input {
     width: 100%;
     padding: 10px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 1em;
+    margin: 8px 0;
+    border: none;
+    border-radius: 8px;
   }
 
   .modal-content button {
-    background: #1abc9c;
-    color: #fff;
+    background: #00ff88;
+    color: #000;
+    padding: 10px 20px;
     border: none;
-    padding: 10px 18px;
-    border-radius: 6px;
-    cursor: pointer;
+    border-radius: 8px;
     margin-top: 10px;
+    font-weight: bold;
+    cursor: pointer;
   }
 
-  .modal-content button:hover {
-    background: #16a085;
-  }
-
-  .modal .close {
+  .close-btn {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 1.3em;
+    top: 20px;
+    right: 30px;
+    font-size: 1.5rem;
+    color: #fff;
     cursor: pointer;
-    color: #333;
-  }
-
-  .switch-link {
-    margin-top: 15px;
-    display: block;
-    color: #1abc9c;
-    cursor: pointer;
-    font-size: 0.9em;
   }
 
   @media (max-width: 768px) {
     header {
-      padding: 15px 25px;
-    }
-    .feature-cards {
       flex-direction: column;
+      padding: 10px;
+    }
+    nav ul {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .pricing-cards, .testimonial-grid {
+      flex-direction: column;
+      align-items: center;
     }
   }
 </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">LearnWise</div>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Dashboard</a>
-      <a href="#">Subjects</a>
-      <a href="#">Lessons</a>
-    </nav>
-    <div class="auth-buttons">
-      <button onclick="openModal('loginModal')">Login</button>
-      <button onclick="openModal('signupModal')">Sign Up</button>
+<!-- HEADER -->
+<header>
+  <h1>LearnWise</h1>
+  <nav>
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#pricing">Plans</a></li>
+      <li><span class="nav-btn" id="loginBtn">Login</span></li>
+      <li><span class="nav-btn" id="signupBtn">Sign Up</span></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <h2>Empowering Sustainable Learning Through Technology</h2>
+  <p>Join LearnWise — your eco-friendly digital classroom platform.</p>
+  <button class="btn" id="getStartedBtn">Get Started</button>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="features">
+  <h2>Our Key Features</h2>
+  <div class="feature-cards">
+    <div class="card">
+      <h3>Interactive Lessons</h3>
+      <p>Engage with dynamic, hands-on lessons that bring topics to life.</p>
     </div>
-  </header>
-
-  <section class="hero">
-    <h1>Welcome to LearnWise</h1>
-    <p>Your smart way to create, manage, and explore interactive lessons. Learn at your own pace and share knowledge effortlessly.</p>
-    <button> <a href="teacher_interface.html">Get Started</a></button> 
-  </section>
-
-  <section class="features">
-    <h2>Why Choose LearnWise?</h2>
-    <div class="feature-cards">
-      <div class="card">
-        <h3>Interactive Dashboard</h3>
-        <p>Manage your lessons and progress with a clean, user-friendly interface built for productivity.</p>
-      </div>
-      <div class="card">
-        <h3>Smart Lessons</h3>
-        <p>Each lesson is designed to be engaging — complete with slides, images, and quizzes.</p>
-      </div>
-      <div class="card">
-        <h3>Easy Collaboration</h3>
-        <p>Invite classmates or share your work easily to make learning more fun and effective.</p>
-      </div>
+    <div class="card">
+      <h3>Community Collaboration</h3>
+      <p>Connect with students and teachers worldwide to share ideas.</p>
     </div>
-  </section>
-
-  <section class="cta">
-    <h2>Ready to Start Your Learning Journey?</h2>
-    <button onclick="openModal('authModal')">Get Started</button>
-
-  </section>
-
-  <footer>
-    © 2025 LearnWise. All Rights Reserved.
-  </footer>
-
- <!-- Combined Auth Modal -->
-  <div class="modal" id="authModal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('authModal')">&times;</span>
-      <h2>Welcome to EduPath</h2>
-      <p>Choose how you want to continue</p>
-      <button onclick="switchTo('login')">Login</button>
-      <button onclick="switchTo('signup')">Sign Up</button>
+    <div class="card">
+      <h3>Eco Data Insights</h3>
+      <p>Access real-world data to make informed, sustainable choices.</p>
     </div>
   </div>
+</section>
 
-  <!-- Login Modal -->
-  <div class="modal" id="loginModal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('loginModal')">&times;</span>
-      <h2>Login</h2>
-      <input type="text" id="loginEmail" placeholder="Email" required>
-      <input type="password" id="loginPassword" placeholder="Password" required>
-      <button onclick="login()">Login</button>
-      <a class="toggle-link" onclick="switchTo('signup')">Don't have an account? Sign Up</a>
+<!-- ABOUT -->
+<section id="about" class="about">
+  <h2>About LearnWise</h2>
+  <p>LearnWise is an innovative platform designed to connect educators and learners with interactive, eco-friendly tools. We believe that knowledge and sustainability go hand-in-hand, creating a better future for both people and the planet.</p>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="testimonials">
+  <h2>What Our Users Say</h2>
+  <div class="testimonial-grid">
+    <div class="testimonial">
+      <p>"LearnWise transformed the way my students engage with lessons. It's fun and intuitive!"</p>
+      <h4>- Ms. Rivera, Educator</h4>
+    </div>
+    <div class="testimonial">
+      <p>"I love how easy it is to collaborate and share our projects globally."</p>
+      <h4>- Ethan, Student</h4>
+    </div>
+    <div class="testimonial">
+      <p>"An amazing tool for teaching sustainability and digital literacy together."</p>
+      <h4>- Dr. Santos, Researcher</h4>
     </div>
   </div>
+</section>
 
-  <!-- Signup Modal -->
-  <div class="modal" id="signupModal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('signupModal')">&times;</span>
-      <h2>Create Account</h2>
-      <input type="text" id="signupName" placeholder="Full Name" required>
-      <input type="email" id="signupEmail" placeholder="Email" required>
-      <input type="password" id="signupPassword" placeholder="Password" required>
-      <button onclick="signup()">Sign Up</button>
-      <a class="toggle-link" onclick="switchTo('login')">Already have an account? Login</a>
+<!-- PRICING -->
+<section id="pricing" class="pricing">
+  <h2>Plans That Fit Every Learner</h2>
+  <div class="pricing-cards">
+    <div class="plan">
+      <h3>Free Plan</h3>
+      <p>Access basic features and start your eco-learning journey.</p>
+      <a href="#" class="btn">Start Free</a>
+    </div>
+    <div class="plan">
+      <h3>Pro Plan</h3>
+      <p>Unlock all lessons, advanced analytics, and collaboration tools.</p>
+      <a href="#" class="btn">Go Pro</a>
+    </div>
+    <div class="plan">
+      <h3>Team Plan</h3>
+      <p>Perfect for schools and organizations with team-based tools.</p>
+      <a href="#" class="btn">Get Team</a>
     </div>
   </div>
+</section>
 
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 LearnWise | <a href="#">Privacy Policy</a> | <a href="#">Terms</a></p>
+</footer>
 
- <script>
-  // ✅ Universal Modal Handling
-  function openModal(id) {
-    document.getElementById(id).style.display = "flex";
-  }
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeLogin">&times;</span>
+    <h2>Login to LearnWise</h2>
+    <input type="email" placeholder="Email" required>
+    <input type="password" placeholder="Password" required>
+    <button>Login</button>
+  </div>
+</div>
 
-  function closeModal(id) {
-    document.getElementById(id).style.display = "none";
-  }
+<!-- SIGNUP MODAL -->
+<div class="modal" id="signupModal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeSignup">&times;</span>
+    <h2>Create Your Account</h2>
+    <input type="text" placeholder="Full Name" required>
+    <input type="email" placeholder="Email" required>
+    <input type="password" placeholder="Password" required>
+    <button>Sign Up</button>
+  </div>
+</div>
 
-  // ✅ Close modal when clicking outside
-  window.onclick = function(e) {
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-      if (e.target === modal) modal.style.display = 'none';
-    });
-  }
+<script>
+  // === MODAL LOGIC ===
+  const loginModal = document.getElementById('loginModal');
+  const signupModal = document.getElementById('signupModal');
+  const loginBtn = document.getElementById('loginBtn');
+  const signupBtn = document.getElementById('signupBtn');
+  const getStartedBtn = document.getElementById('getStartedBtn');
+  const closeLogin = document.getElementById('closeLogin');
+  const closeSignup = document.getElementById('closeSignup');
 
-  // ✅ Switch between login, signup, and auth modals
-  function switchTo(mode) {
-    closeModal('authModal');
-    closeModal('loginModal');
-    closeModal('signupModal');
-    if (mode === 'login') openModal('loginModal');
-    if (mode === 'signup') openModal('signupModal');
-  }
+  loginBtn.onclick = () => loginModal.style.display = 'flex';
+  signupBtn.onclick = () => signupModal.style.display = 'flex';
+  getStartedBtn.onclick = () => signupModal.style.display = 'flex';
 
-  // ✅ Simulated login / signup flow
-  function login() {
-    const email = document.getElementById('loginEmail').value.trim();
-    const pass = document.getElementById('loginPassword').value.trim();
-    if (email && pass) {
-      alert('Login successful!');
-      window.location.href = 'dashboard.html';
-    } else {
-      alert('Please fill out all fields.');
-    }
-  }
+  closeLogin.onclick = () => loginModal.style.display = 'none';
+  closeSignup.onclick = () => signupModal.style.display = 'none';
 
-  function signup() {
-    const name = document.getElementById('signupName').value.trim();
-    const email = document.getElementById('signupEmail').value.trim();
-    const pass = document.getElementById('signupPassword').value.trim();
-    if (name && email && pass) {
-      alert('Account created successfully!');
-      window.location.href = 'dashboard.html';
-    } else {
-      alert('Please fill out all fields.');
-    }
+  window.onclick = (e) => {
+    if (e.target == loginModal) loginModal.style.display = 'none';
+    if (e.target == signupModal) signupModal.style.display = 'none';
   }
 </script>
+
+</body>
+</html>
