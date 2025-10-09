@@ -1,3 +1,15 @@
+// --- Profile Data Model (New Dynamic Data - Initial Blank State) ---
+// This model will be populated by a future login/signup.
+let studentProfileData = {
+    name: "New Student",
+    role: "Student",
+    email: "student@example.com",
+    phone: "N/A",
+    address: "N/A",
+    joined: "Today",
+    profilePicUrl: "" // Field for optional profile picture URL
+};
+
 // --- Utility Functions ---
 function customAlert(message) {
     console.log("Action triggered: " + message);
@@ -29,6 +41,54 @@ function setActiveNavItem(section) {
     if (activeItem) {
         activeItem.classList.add('active');
     }
+}
+
+// --- PROFILE MODAL FUNCTIONS ---
+window.openEditModal = function() {
+    // Populate modal inputs with current data before opening
+    document.getElementById('editName').value = studentProfileData.name;
+    document.getElementById('editRole').value = studentProfileData.role;
+    document.getElementById('editEmail').value = studentProfileData.email;
+    document.getElementById('editPhone').value = studentProfileData.phone;
+    document.getElementById('editAddress').value = studentProfileData.address;
+    document.getElementById('editProfilePicUrl').value = studentProfileData.profilePicUrl;
+
+    const editModalEl = document.getElementById('editModal');
+    if (editModalEl) editModalEl.classList.add('active');
+    
+    // Hide all other modals
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        if (modal.id !== 'editModal') modal.classList.remove('active');
+    });
+}
+
+window.closeEditModal = function() {
+    const editModalEl = document.getElementById('editModal');
+    if (editModalEl) editModalEl.classList.remove('active');
+}
+
+window.saveProfile = function() {
+  // 1. Capture new values, using fallback defaults
+  const name = document.getElementById('editName').value.trim() || "New Student";
+  const role = document.getElementById('editRole').value.trim() || "Student";
+  const email = document.getElementById('editEmail').value.trim() || "N/A";
+  const phone = document.getElementById('editPhone').value.trim() || "N/A";
+  const address = document.getElementById('editAddress').value.trim() || "N/A";
+  const profilePicUrl = document.getElementById('editProfilePicUrl').value.trim();
+
+  // 2. Update the dynamic data model
+  studentProfileData.name = name;
+  studentProfileData.role = role;
+  studentProfileData.email = email;
+  studentProfileData.phone = phone;
+  studentProfileData.address = address;
+  studentProfileData.profilePicUrl = profilePicUrl;
+
+  // 3. Re-render the UI content
+  loadStudentContent('profile');
+  
+  customAlert(`Profile updated for ${name}.`);
+  closeEditModal();
 }
 
 let studentChartInstance = null;
@@ -90,35 +150,35 @@ function scrollCatalogue(containerId, direction) {
 
 /**
  * Handles the user logging out.
- * Updated to redirect to index.php (the teacher's dashboard).
+ * Updated to redirect to index.html (the teacher/login dashboard).
  */
 function handleLogout() {
     customAlert('Logging out... Thank you for using EcoLearn!');
     setTimeout(() => {
-        window.location.href = 'index.php'; // Renamed teacher dashboard to PHP
+        window.location.href = 'index.html'; 
     }, 1500);
 }
 
 // ------------------------------------------------------------------
-// NEW QR CODE ACCESS LOGIC
+// QR CODE ACCESS LOGIC 
 // ------------------------------------------------------------------
 
 /**
  * Initiates the QR code access flow by showing the identity selection modal.
- * This function would be called by the QR scanning page/logic, passing the resource link data.
  * @param {number} resourceId - The ID of the lesson or activity.
  * @param {string} resourceType - 'lesson' or 'activity'.
  */
 function handleQRAccess(resourceId, resourceType) {
     // 1. Set the resource details in the hidden form inputs
-    document.getElementById('anonResourceId').value = resourceId;
-    document.getElementById('anonResourceType').value = resourceType;
+    const anonResourceIdEl = document.getElementById('anonResourceId');
+    const anonResourceTypeEl = document.getElementById('anonResourceType');
+    if(anonResourceIdEl) anonResourceIdEl.value = resourceId;
+    if(anonResourceTypeEl) anonResourceTypeEl.value = resourceType;
 
     // 2. Simulate fetching resource title and update modal
     const title = resourceType.charAt(0).toUpperCase() + resourceType.slice(1);
-    
-    // In a real application, you would fetch the title from the backend.
-    document.getElementById('qrResourceTitle').textContent = `Resource: ${title} ID ${resourceId}`;
+    const qrResourceTitleEl = document.getElementById('qrResourceTitle');
+    if(qrResourceTitleEl) qrResourceTitleEl.textContent = `Resource: ${title} ID ${resourceId}`;
 
     // 3. Display the modal
     showModal('qrLandingModal');
@@ -130,28 +190,26 @@ function handleQRAccess(resourceId, resourceType) {
  * Processes the anonymous student's name entry and simulates content access.
  */
 function processAnonymousAccess() {
-    const name = document.getElementById('anonName').value;
-    const resourceId = document.getElementById('anonResourceId').value;
-    const resourceType = document.getElementById('anonResourceType').value;
+    const anonNameEl = document.getElementById('anonName');
+    const resourceIdEl = document.getElementById('anonResourceId');
+    const resourceTypeEl = document.getElementById('anonResourceType');
+    
+    if(!anonNameEl || !resourceIdEl || !resourceTypeEl) return;
+    
+    const name = anonNameEl.value;
+    const resourceId = resourceIdEl.value;
+    const resourceType = resourceTypeEl.value;
 
     if (!name.trim()) {
         customAlert("Please enter your name/initials to proceed anonymously.");
         return;
     }
 
-    // SIMULATED LOGIC:
-    // This is where a PHP endpoint would be called to:
-    // 1. Create a temporary 'Anonymous' user record with the provided 'name'.
-    // 2. Return an Anonymous Session ID.
-    
     customAlert(`Success! Session started for Anonymous User: ${name}. Loading ${resourceType} ${resourceId}.`);
     
-    // Example: Redirect to the content viewer page with temporary credentials
-    // window.location.href = `/view/resource.php?type=${resourceType}&id=${resourceId}&anon_name=${encodeURIComponent(name)}`;
-
     // For now, hide modal and simulate content start
     hideModal('qrLandingModal');
-    document.getElementById('anonName').value = ''; // Clear input
+    anonNameEl.value = ''; // Clear input
 }
 
 // --- Student-Specific Content Rendering ---
@@ -164,7 +222,7 @@ function loadStudentContent(section) {
   switch(section) {
     case 'dashboard':
         html = `
-            <h2>Welcome Back, [Student Name]! 窓</h2>
+            <h2>Welcome Back, [Student Name]! 🧑‍🎓</h2>
             <p class="subtitle">Quickly access lessons, check deadlines, or scan a code to start a new activity.</p>
             
             <div class="action-card qr-focus-card">
@@ -235,7 +293,7 @@ function loadStudentContent(section) {
             <div class="lessons-container">
                 <div class="catalogue-header">
                     <div>
-                        <h2>Course Catalogue & Library 答</h2>
+                        <h2>Course Catalogue & Library 📚</h2>
                         <p class="subtitle">Explore all available environmental science lessons and recommended activities.</p>
                     </div>
                     <div class="catalogue-search-bar">
@@ -245,7 +303,7 @@ function loadStudentContent(section) {
                 </div>
                 
                 <div class="catalogue-row-section">
-                    <h3>櫨 Trending Lessons</h3>
+                    <h3>🔥 Trending Lessons</h3>
                     <div class="catalogue-slider">
                         <div class="scroll-arrow left" onclick="scrollCatalogue('trendingSlider', 'left')"><i class="fas fa-chevron-left"></i></div>
                         <div class="slider-container" id="trendingSlider">
@@ -272,6 +330,7 @@ function loadStudentContent(section) {
                                 <div class="lesson-metrics">
                                     <span><i class="fas fa-tags"></i> Related: Biodiversity</span>
                                     <span><i class="fas fa-book-open"></i> Preview Lesson</span>
+                                
                                 </div>
                                 <button class="action-small-btn edit-btn" onclick="customAlert('Enrolling in course...')"><i class="fas fa-arrow-right"></i> Enroll Now</button>
                             </div>
@@ -319,7 +378,7 @@ function loadStudentContent(section) {
                 </div>
                 
                 <div class="catalogue-row-section">
-                    <h3>･Most Popular Activities</h3>
+                    <h3>💡Most Popular Activities</h3>
                     <p class="subtitle catalogue-subtitle">Practice exercises frequently taken by your peers.</p>
                     <div class="catalogue-slider">
                         <div class="scroll-arrow left" onclick="scrollCatalogue('activitySlider', 'left')"><i class="fas fa-chevron-left"></i></div>
@@ -381,7 +440,7 @@ function loadStudentContent(section) {
                 </div>
                 
                 <div class="catalogue-row-section">
-                    <h3>笨ｨ Newly Added</h3>
+                    <h3>🆕 Newly Added</h3>
                     <div class="catalogue-slider">
                         <div class="scroll-arrow left" onclick="scrollCatalogue('newSlider', 'left')"><i class="fas fa-chevron-left"></i></div>
                         <div class="slider-container" id="newSlider">
@@ -590,6 +649,109 @@ function loadStudentContent(section) {
         `;
         setTimeout(() => drawStudentPerformanceChart(), 10);
       break;
+
+    case 'profile':
+        // Logic to determine profile picture display
+        let profilePicHtml = '';
+        const nameParts = studentProfileData.name.split(' ');
+        const firstWord = nameParts[0].toUpperCase();
+
+        if (studentProfileData.profilePicUrl) {
+            // Use image URL if provided
+            profilePicHtml = `<div class="student-avatar" style="width: 100px; height: 100px; font-size: 2.5rem; background-image: url('${studentProfileData.profilePicUrl}'); background-size: cover; background-position: center; border: 3px solid var(--secondary-color);"></div>`;
+        } else {
+            // Display first word of name as text placeholder
+            profilePicHtml = `<div class="student-avatar" style="width: 100px; height: 100px; font-size: 1.5rem; line-height: 100px; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background-color: var(--secondary-color);">${firstWord}</div>`;
+        }
+
+        html = `
+            <div class="profile-container chart-card">
+                <div class="profile-header">
+                    ${profilePicHtml}
+                    <div>
+                        <h2 id="userName">${studentProfileData.name}</h2>
+                        <p class="role" id="userRole" style="color: var(--primary-color);">${studentProfileData.role}</p>
+                        <button class="edit-btn action-small-btn edit-btn" style="background-color: var(--secondary-color);" onclick="openEditModal()">
+                            <i class="fas fa-user-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3 style="color: var(--secondary-color);">Contact Information</h3>
+                    <div class="info-grid" id="infoGrid">
+                        <div class="stat-card" style="padding: 15px;">Email: <strong>${studentProfileData.email}</strong></div>
+                        <div class="stat-card" style="padding: 15px;">Phone: <strong>${studentProfileData.phone}</strong></div>
+                        <div class="stat-card" style="padding: 15px;">Address: <strong>${studentProfileData.address}</strong></div>
+                        <div class="stat-card" style="padding: 15px;">Joined: <strong>${studentProfileData.joined}</strong></div>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--secondary-color);">Learning Summary</h3>
+                <div class="features dashboard-grid" style="margin-top: 15px;">
+                    <div class="feature-card chart-card">
+                        <h4>Overall Average Score</h4>
+                        <p style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);">85%</p>
+                    </div>
+                    <div class="feature-card chart-card">
+                        <h4>Completed Lessons</h4>
+                        <p style="font-size: 1.5rem; font-weight: 700;">5 / 10</p>
+                    </div>
+                    <div class="feature-card chart-card">
+                        <h4>Assignments Due</h4>
+                        <p style="font-size: 1.5rem; font-weight: 700; color: var(--status-archived);">1 Overdue</p>
+                    </div>
+                </div>
+
+                <button class="logout-btn action-button delete-btn" style="width: 200px; margin-top: 25px;" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        `;
+        break;
+    
+    case 'settings':
+        // Minimal Settings: Only Account Security & Contact
+        html = `
+            <div class="settings-content-wrapper">
+                <h1>Settings</h1>
+                <p class="subtitle">Manage your core account security and contact information.</p>
+
+                <div class="settings-section chart-card">
+                  <h3>Account Security & Contact</h3>
+                  <div class="settings-option">
+                    <label>Change Password</label>
+                    <button class="action-small-btn edit-btn" style="background-color: var(--secondary-color);" onclick="customAlert('Opening password update form...')">
+                        <i class="fas fa-key"></i> Update
+                    </button>
+                  </div>
+                  <div class="settings-option">
+                    <label>Update Email</label>
+                    <button class="action-small-btn edit-btn" style="background-color: var(--secondary-color);" onclick="customAlert('Opening email update form...')">
+                        <i class="fas fa-envelope"></i> Change
+                    </button>
+                  </div>
+                  <div class="settings-option">
+                    <label>Update Phone</label>
+                    <button class="action-small-btn edit-btn" style="background-color: var(--secondary-color);" onclick="customAlert('Opening phone number update form...')">
+                        <i class="fas fa-phone"></i> Change
+                    </button>
+                  </div>
+                  <div class="settings-option">
+                    <label>Update Address</label>
+                    <button class="action-small-btn edit-btn" style="background-color: var(--secondary-color);" onclick="customAlert('Opening address update form...')">
+                        <i class="fas fa-map-marker-alt"></i> Change
+                    </button>
+                  </div>
+                </div>
+                
+                <p style="color: #7f8c8d; text-align: center; margin-top: 50px;">
+                    Use the main sidebar for all other navigation and Logout.
+                </p>
+            </div>
+        `;
+        break;
+
     default:
       html = `<p class="welcome-text">Select a section from the navigation menu to begin your learning journey.</p>`;
   }

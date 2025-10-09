@@ -12,6 +12,16 @@ let lessonsData = [
     { id: 3, title: 'Biodiversity & Ecosystems (v1)', grade: 'Grade 7', activities: 2, status: 'archived', views: 200, classes: 5, lastEdit: null }
 ];
 
+let userProfileData = {
+    name: "New Teacher",
+    role: "Teacher (Unregistered)",
+    email: "email@example.com",
+    phone: "N/A",
+    address: "N/A",
+    joined: "Today",
+    profilePicUrl: "" // Field for optional profile picture URL
+};
+
 let activitiesData = [
     { id: 101, title: 'Water Cycle Simulation Lab', type: 'Simulation', status: 'open', submissions: 28, graded: 25, dueDate: '2025-10-15', relatedLesson: 'Water Cycle & Hydrology' },
     { id: 102, title: 'Local Pollution Photo Essay', type: 'Project', status: 'draft', submissions: 0, graded: 0, dueDate: '2025-11-01', relatedLesson: 'Pollution Sources' },
@@ -58,6 +68,67 @@ function hideModal(id) {
     if (modal) {
         modal.classList.remove('active');
     }
+}
+
+// --- UPDATED PROFILE MODAL FUNCTIONS ---
+window.openEditModal = function() {
+    // Populate modal inputs with current data before opening
+    document.getElementById('editName').value = userProfileData.name;
+    document.getElementById('editRole').value = userProfileData.role;
+    document.getElementById('editEmail').value = userProfileData.email;
+    document.getElementById('editPhone').value = userProfileData.phone;
+    document.getElementById('editAddress').value = userProfileData.address;
+    
+    // NEW: Include the Profile Picture URL field
+    const editProfilePicUrlEl = document.getElementById('editProfilePicUrl');
+    if(editProfilePicUrlEl) editProfilePicUrlEl.value = userProfileData.profilePicUrl;
+
+    const editModalEl = document.getElementById('editModal');
+    if (editModalEl) editModalEl.classList.add('active');
+}
+
+window.closeEditModal = function() {
+    const editModalEl = document.getElementById('editModal');
+    if (editModalEl) editModalEl.classList.remove('active');
+}
+
+window.saveProfile = function() {
+  // 1. Capture new values, using fallback defaults
+  const name = document.getElementById('editName').value.trim() || "New Teacher";
+  const role = document.getElementById('editRole').value.trim() || "Teacher";
+  const email = document.getElementById('editEmail').value.trim() || "N/A";
+  const phone = document.getElementById('editPhone').value.trim() || "N/A";
+  const address = document.getElementById('editAddress').value.trim() || "N/A";
+  const profilePicUrl = document.getElementById('editProfilePicUrl').value.trim();
+
+  // 2. Update the dynamic data model
+  userProfileData.name = name;
+  userProfileData.role = role;
+  userProfileData.email = email;
+  userProfileData.phone = phone;
+  userProfileData.address = address;
+  userProfileData.profilePicUrl = profilePicUrl; // Save the URL
+
+  // 3. Re-render the UI content
+  loadContent('profile');
+  
+  customAlert(`Profile updated for ${name}.`);
+  closeEditModal();
+}
+
+
+// --- NEW SETTINGS FUNCTIONS (from settings.html) ---
+window.saveSettings = function() {
+    const settings = {
+        dashboardView: document.getElementById("dashboardView")?.value || "Grid",
+        notificationsToggle: document.getElementById("notificationsToggle")?.classList.contains("active"),
+        darkModeToggle: document.getElementById("darkModeToggle")?.classList.contains("active"),
+        autoSaveToggle: document.getElementById("autoSaveToggle")?.classList.contains("active"),
+        feedbackToggle: document.getElementById("feedbackToggle")?.classList.contains("active")
+    };
+
+    localStorage.setItem("userSettings", JSON.stringify(settings));
+    customAlert("Settings saved successfully!");
 }
 
 // --- LESSON FUNCTIONS ---
@@ -767,6 +838,141 @@ function loadContent(section) {
         setTimeout(() => renderLessons(), 10);
       break;
 
+// ... other cases ...
+
+case 'profile':
+        // Logic to determine profile picture display (Synchronized with student profile)
+        let profilePicHtml = '';
+        const nameParts = userProfileData.name.split(' ');
+        const firstWord = nameParts[0].toUpperCase();
+
+        if (userProfileData.profilePicUrl) {
+            // Use image URL if provided
+            // Note: The teacher profile uses different primary/secondary colors than the student profile, 
+            // so we don't need to specify background-color here.
+            profilePicHtml = `<div class="student-avatar" id="profilePicAvatar" style="width: 100px; height: 100px; font-size: 2.5rem; background-image: url('${userProfileData.profilePicUrl}'); background-size: cover; background-position: center; border-radius: 50%; border: 3px solid var(--primary-color);"></div>`;
+        } else {
+            // Display first word of name as text placeholder
+            profilePicHtml = `<div class="student-avatar" id="profilePicAvatar" style="width: 100px; height: 100px; font-size: 1.5rem; line-height: 100px; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background-color: var(--primary-color);">${firstWord}</div>`;
+        }
+
+        html = `
+            <div class="profile-container chart-card">
+                <div class="profile-header">
+                    ${profilePicHtml}
+                    <div>
+                        <h2 id="userName">${userProfileData.name}</h2>
+                        <p class="role" id="userRole" style="color: var(--secondary-color);">${userProfileData.role}</p>
+                        <button class="edit-btn action-small-btn edit-btn" onclick="openEditModal()">
+                            <i class="fas fa-user-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3 style="color: var(--primary-color);">Contact Information</h3>
+                    <div class="info-grid" id="infoGrid">
+                        <div class="stat-card" style="padding: 15px;">Email: <strong>${userProfileData.email}</strong></div>
+                        <div class="stat-card" style="padding: 15px;">Phone: <strong>${userProfileData.phone}</strong></div>
+                        <div class="stat-card" style="padding: 15px;">Address: <strong>${userProfileData.address}</strong></div>
+                        <div class="stat-card" style="padding: 15px;">Joined: <strong>${userProfileData.joined}</strong></div>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--primary-color);">Account Summary</h3>
+                <div class="features dashboard-grid" style="margin-top: 15px;">
+                    <div class="feature-card chart-card">
+                        <h4>Subjects Taught</h4>
+                        <p>Environmental Science, Geography, Biology</p>
+                    </div>
+                    <div class="feature-card chart-card">
+                        <h4>Activity Summary</h4>
+                        <p>Lessons Created: ${lessonsData.length} | Activities: ${activitiesData.length}</p>
+                    </div>
+                    <div class="feature-card chart-card">
+                        <h4>Total Anonymous Users</h4>
+                        <p>Accessed Content: ${analyticsData.engagement.anonymous}</p>
+                    </div>
+                </div>
+
+                <button class="logout-btn action-button delete-btn" style="width: 200px; margin-top: 25px;" onclick="handleTeacherLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            
+            <div class="modal-overlay" id="editModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header-content">
+                            <h3 style="color: var(--primary-color);">Edit Profile</h3>
+                            <button class="modal-close-btn" onclick="closeEditModal()">&times;</button>
+                        </div>
+                        <h4 style="margin-bottom: 5px; color: var(--text-color);">Personal Details:</h4>
+                        <input type="text" id="editName" placeholder="Full Name">
+                        <input type="text" id="editRole" placeholder="Role (Teacher)">
+                        
+                        <h4 style="margin-top: 20px; margin-bottom: 5px; color: var(--text-color);">Profile Image (URL):</h4>
+                        <input type="url" id="editProfilePicUrl" placeholder="Paste image URL here (e.g., https://via.placeholder.com/100)">
+
+                        <h4 style="margin-top: 20px; margin-bottom: 5px; color: var(--text-color);">Contact Details:</h4>
+                        <input type="email" id="editEmail" placeholder="Email Address">
+                        <input type="text" id="editPhone" placeholder="Phone Number">
+                        <input type="text" id="editAddress" placeholder="Address">
+                        
+                        <div class="modal-buttons" style="text-align: right; margin-top: 20px;">
+                            <button class="cancel-btn action-small-btn archive-btn" onclick="closeEditModal()">Cancel</button>
+                            <button class="save-btn action-small-btn view-btn" onclick="saveProfile()">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        break;
+
+    case 'settings':
+        // Minimal Settings: Only Account Security & Contact
+        html = `
+            <div class="settings-content-wrapper">
+                <h1>Settings</h1>
+                <p class="subtitle">Manage your core account security and contact information.</p>
+
+                <div class="settings-section chart-card">
+                  <h3>Account Security & Contact</h3>
+                  <div class="settings-option">
+                    <label>Change Password</label>
+                    <button class="action-small-btn edit-btn" onclick="customAlert('Opening password update form...')">
+                        <i class="fas fa-key"></i> Update
+                    </button>
+                  </div>
+                  <div class="settings-option">
+                    <label>Update Email</label>
+                    <button class="action-small-btn edit-btn" onclick="customAlert('Opening email update form...')">
+                        <i class="fas fa-envelope"></i> Change
+                    </button>
+                  </div>
+                  <div class="settings-option">
+                    <label>Update Phone</label>
+                    <button class="action-small-btn edit-btn" onclick="customAlert('Opening phone number update form...')">
+                        <i class="fas fa-phone"></i> Change
+                    </button>
+                  </div>
+                  <div class="settings-option">
+                    <label>Update Address</label>
+                    <button class="action-small-btn edit-btn" onclick="customAlert('Opening address update form...')">
+                        <i class="fas fa-map-marker-alt"></i> Change
+                    </button>
+                  </div>
+                </div>
+                
+                <p style="color: #7f8c8d; text-align: center; margin-top: 50px;">
+                    All other settings are managed by your administrator. Use the main sidebar for Logout.
+                </p>
+            </div>
+        `;
+        break;
+    
+    // ... default case and function closing bracket ...
+
     case 'activities':
         html = `
             <div class="activities-container">
@@ -914,6 +1120,7 @@ function loadContent(section) {
     default:
       html = `<p class="welcome-text">Welcome to EcoLearn! Select a section from the navigation menu.</p>`;
   }
+  
   
   content.innerHTML = html;
 }

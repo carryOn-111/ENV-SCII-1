@@ -33,9 +33,9 @@
         <span>Dashboard</span>
       </div>
       
-      <div class="nav-item catalogue" onclick="loadStudentContent('catalogue')">
+      <div class="nav-item library" onclick="loadStudentContent('catalogue')">
         <i class="fas fa-layer-group"></i>
-        <span>Course Catalogue</span>
+        <span>Library</span>
       </div>
       
       <div class="nav-item student-lessons" onclick="loadStudentContent('lessons')">
@@ -56,14 +56,15 @@
     </div>
     
     <!-- FOOTER NAVIGATION SECTION -->
-    <div class="footer-nav-section">
-      <!-- Settings Link -->
-      <div class="nav-item settings" onclick="customAlert('Loading account settings and profile editor.')">
+<div class="footer-nav-section">
+      <div class="nav-item profile" onclick="loadStudentContent('profile')">
+        <i class="fas fa-user-circle"></i>
+        <span>Profile</span>
+      </div>
+      <div class="nav-item settings" onclick="loadStudentContent('settings')">
         <i class="fas fa-cog"></i>
         <span>Settings</span>
       </div>
-      
-      <!-- Logout Button -->
       <div class="nav-item logout" onclick="handleLogout()">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
@@ -111,7 +112,32 @@
         </form>
     </div>
   </div>
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header-content">
+                <h3 style="color: var(--secondary-color);">Edit Profile</h3>
+                <button class="modal-close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <h4 style="margin-bottom: 5px; color: var(--text-color);">Personal Details:</h4>
+            <input type="text" id="editName" placeholder="Full Name" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" id="editRole" placeholder="Role (Student)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            
+            <h4 style="margin-top: 15px; margin-bottom: 5px; color: var(--text-color);">Profile Image (URL):</h4>
+            <input type="url" id="editProfilePicUrl" placeholder="Paste image URL here (optional)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
 
+            <h4 style="margin-top: 15px; margin-bottom: 5px; color: var(--text-color);">Contact Details:</h4>
+            <input type="email" id="editEmail" placeholder="Email Address" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" id="editPhone" placeholder="Phone Number" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" id="editAddress" placeholder="Address" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            
+            <div class="modal-buttons" style="text-align: right; margin-top: 15px;">
+                <button class="cancel-btn action-small-btn archive-btn" onclick="closeEditModal()">Cancel</button>
+                <button class="save-btn action-small-btn view-btn" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+  </div>
   <!-- Load JavaScript -->
   <script src="scripts/student-dashboard.js"></script>
 </body>
