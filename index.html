@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoLearn Platform - Teacher Dashboard</title>
+  
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Chart.js for Data Visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <!-- QRCode Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.0.0/qrcode.min.js"></script>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <div class="logo">
+      <i class="fas fa-leaf fa-2x"></i>
+      <h2>EcoLearn</h2>
+    </div>
+    
+    <div class="nav-section">
+      <div class="nav-item dashboard" onclick="loadContent('dashboard')">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </div>
+      
+      <div class="nav-item lessons" onclick="loadContent('lessons')">
+        <i class="fas fa-book-open"></i>
+        <span>Lessons</span>
+      </div>
+      
+      <div class="nav-item activities" onclick="loadContent('activities')">
+        <i class="fas fa-puzzle-piece"></i>
+        <span>Activities</span>
+      </div>
+      
+      <div class="nav-item analytics" onclick="loadContent('analytics')">
+        <i class="fas fa-chart-line"></i>
+        <span>Analytics</span>
+      </div>
+    </div>
+    
+    <!-- FOOTER NAVIGATION SECTION (Settings & Logout) -->
+    <div class="footer-nav-section">
+      <div class="nav-item settings" onclick="customAlert('Loading teacher account settings.')">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </div>
+      
+      <div class="nav-item logout" onclick="handleTeacherLogout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <header class="header">
+      <i class="fas fa-graduation-cap"></i>
+      <h1>Environmental Science Learning Platform</h1>
+    </header>
+    
+    <div id="content">
+      <p class="welcome-text">Loading Dashboard...</p>
+    </div>
+  </div>
+
+  <!-- MODALS START HERE -->
+
+  <!-- 1. Initial Lesson Creation Modal (Title/Config) -->
+  <div id="createLessonModal" class="modal-overlay">
+    <div class="modal-dialog">
+        <div class="modal-header-content">
+            <h3 style="color: var(--primary-color);">Create New Lesson</h3>
+            <button onclick="hideModal('createLessonModal')" class="modal-close-btn">&times;</button>
+        </div>
+        
+        <form id="newLessonForm">
+            <div style="margin-bottom: 15px;">
+                <label for="lessonTitle" style="display: block; font-weight: 600; margin-bottom: 5px;">Lesson Title:</label>
+                <input type="text" id="lessonTitle" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <strong style="display: block; margin-bottom: 10px;">Visual Appeal & Background:</strong>
+                <div style="display: flex; gap: 15px;">
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="radio" name="bgType" value="simple" checked>
+                        <span style="margin-left: 5px;">Simple Theme</span>
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="radio" name="bgType" value="image">
+                        <span style="margin-left: 5px;">Upload Background Image</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="action-button" style="width: 100%;">
+                <i class="fas fa-edit"></i> Save and Start Editing
+            </button>
+        </form>
+    </div>
+  </div>
+  
+  <!-- 2. Full Lesson Editor Modal -->
+  <div id="lessonEditorModal" class="modal-overlay editor">
+    <div class="modal-dialog editor">
+        <div class="modal-header-content">
+            <h3 id="editorTitle" style="color: var(--primary-color);">Editor: [Lesson Title]</h3>
+            <div>
+                <button onclick="customAlert('Saving changes to lesson...')" class="action-small-btn view-btn"><i class="fas fa-save"></i> Save Draft</button>
+                <button onclick="hideModal('lessonEditorModal')" class="modal-close-btn">&times;</button>
+            </div>
+        </div>
+        
+        <div class="editor-content-area">
+            <!-- Left: Slide List -->
+            <div class="editor-sidebar">
+                <strong style="display: block; margin-bottom: 10px;">Slides/Sections</strong>
+                <div id="slideList">
+                    <!-- Dynamic slides will be here -->
+                    <div class="slide-item active">Slide 1: Introduction</div>
+                    <div class="slide-item">Slide 2: Water Cycle Overview</div>
+                    <div class="slide-item">Slide 3: Hydrology Terms</div>
+                </div>
+                <button class="action-small-btn edit-btn" style="margin-top: 15px; width: 100%;"><i class="fas fa-plus"></i> Add New Slide</button>
+            </div>
+
+            <!-- Right: Content Editor Panel -->
+            <div class="editor-main-panel">
+                <h4 style="margin-bottom: 15px;">Slide 1: Introduction</h4>
+                <textarea rows="15" placeholder="Enter lesson content, notes, or use a rich text editor placeholder here..." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+                
+                <div style="margin-top: 15px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 5px;">Media/Image URL:</label>
+                    <input type="url" placeholder="Paste image URL here..." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="config-button-group">
+            <button onclick="customAlert('Publishing lesson: Title')" class="action-small-btn publish-btn"><i class="fas fa-upload"></i> Publish Lesson</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- 3. Initial Activity Creation Modal (Title/Type/Date) -->
+  <div id="createActivityModal" class="modal-overlay">
+    <div class="modal-dialog">
+        <div class="modal-header-content">
+            <h3 style="color: var(--secondary-color);">Create New Activity</h3>
+            <button onclick="hideModal('createActivityModal')" class="modal-close-btn">&times;</button>
+        </div>
+        
+        <form id="newActivityForm">
+            <div style="margin-bottom: 15px;">
+                <label for="activityTitle" style="display: block; font-weight: 600; margin-bottom: 5px;">Activity Title:</label>
+                <input type="text" id="activityTitle" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="activityType" style="display: block; font-weight: 600; margin-bottom: 5px;">Activity Type:</label>
+                <select id="activityType" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                    <option value="Quiz">Quiz / Assessment</option>
+                    <option value="Project">Project / Essay</option>
+                    <option value="Simulation">Simulation / Lab</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="activityDueDate" style="display: block; font-weight: 600; margin-bottom: 5px;">Due Date:</label>
+                <input type="date" id="activityDueDate" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                <div style="margin-top: 5px;">
+                    <label style="cursor: pointer; display: flex; align-items: center; font-size: 0.9rem;">
+                        <input type="checkbox" id="noDueDate" onchange="document.getElementById('activityDueDate').disabled = this.checked; document.getElementById('activityDueDate').value = '';">
+                        <span style="margin-left: 5px;">No Due Date (N/A)</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="action-button" style="width: 100%; background-color: var(--secondary-color);">
+                <i class="fas fa-tools"></i> Configure Activity
+            </button>
+        </form>
+    </div>
+  </div>
+
+  <!-- 4. Full Activity Configurator Modal -->
+  <div id="activityConfiguratorModal" class="modal-overlay editor">
+    <div class="modal-dialog editor">
+        <div class="modal-header-content">
+            <h3 id="configuratorTitle" style="color: var(--secondary-color);">Configurator: [Activity Title]</h3>
+            <div>
+                <button onclick="customAlert('Saving changes to activity configuration...')" class="action-small-btn view-btn"><i class="fas fa-save"></i> Save Draft</button>
+                <button onclick="hideModal('activityConfiguratorModal')" class="modal-close-btn">&times;</button>
+            </div>
+        </div>
+        
+        <div class="editor-content-area">
+            <!-- Left: Question List -->
+            <div class="editor-sidebar">
+                <strong style="display: block; margin-bottom: 10px;">Questions/Sections</strong>
+                <div id="questionList">
+                    <!-- Dynamic questions will be here -->
+                    <div class="slide-item active">Q1: Multiple Choice (10 pts)</div>
+                    <div class="slide-item">Q2: Short Answer (5 pts)</div>
+                    <div class="slide-item">Q3: Essay Prompt (25 pts)</div>
+                </div>
+                <button class="action-small-btn edit-btn" style="margin-top: 15px; width: 100%; background-color: var(--secondary-color);"><i class="fas fa-plus"></i> Add New Question</button>
+            </div>
+
+            <!-- Right: Question Editor Panel -->
+            <div class="editor-main-panel">
+                <h4 style="margin-bottom: 15px;">Editing Q1: Multiple Choice</h4>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="questionText" style="display: block; font-weight: 600; margin-bottom: 5px;">Question Text:</label>
+                    <textarea id="questionText" rows="5" placeholder="What is the process of water moving from the ground to the atmosphere?" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="pointValue" style="display: block; font-weight: 600; margin-bottom: 5px;">Point Value:</label>
+                    <input type="number" id="pointValue" value="10" min="1" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+
+                <h5 style="margin-bottom: 10px; font-weight: 600;">Answer Options:</h5>
+                <div id="answerOptions">
+                    <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                        <input type="radio" name="answerQ1" checked>
+                        <input type="text" value="Evaporation" placeholder="Option A" style="flex-grow: 1; padding: 5px; border: 1px solid #eee; border-radius: 4px;">
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                        <input type="radio" name="answerQ1">
+                        <input type="text" value="Condensation" placeholder="Option B" style="flex-grow: 1; padding: 5px; border: 1px solid #eee; border-radius: 4px;">
+                    </div>
+                </div>
+
+                <div class="config-button-group">
+                    <button onclick="customAlert('Adding another answer option.')" class="action-small-btn archive-btn"><i class="fas fa-plus"></i> Add Option</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="config-button-group">
+            <button onclick="customAlert('Publishing activity: Title')" class="action-small-btn publish-btn"><i class="fas fa-upload"></i> Publish Activity</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Other Modals (Lesson Viewer, Student Records, QR Generator) -->
+  <div id="lessonViewerModal" class="modal-overlay viewer">
+    <div id="lessonSlideshow" class="modal-dialog lg">
+        
+        <div class="modal-header-content" style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 0;">
+            <h3 id="slideshowTitle" style="color: var(--secondary-color); font-size: 1.5rem;">Viewing Lesson: [Lesson Title]</h3>
+            <button onclick="hideModal('lessonViewerModal')" style="background: var(--status-archived); color: white; border: none; border-radius: 4px; padding: 5px 15px; cursor: pointer;"><i class="fas fa-times"></i> Close</button>
+        </div>
+
+        <div id="slideContent" class="lesson-viewer-slide">
+            Slide Content Placeholder (Simulated Slideshow View)
+        </div>
+
+        <div class="lesson-viewer-nav">
+            <button style="padding: 8px 15px; background: var(--secondary-color); color: white; border: none; border-radius: 4px; cursor: pointer;"><i class="fas fa-arrow-left"></i> Previous</button>
+            <span id="slideCounter" style="color: #7f8c8d; line-height: 35px;">Slide 1 of 5</span>
+            <button style="padding: 8px 15px; background: var(--secondary-color); color: white; border: none; border-radius: 4px; cursor: pointer;">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+    </div>
+  </div>
+  
+  <div id="studentRecordsModal" class="modal-overlay records">
+    <div class="modal-dialog records-sm">
+        <div class="modal-header-content">
+            <h3 style="color: var(--secondary-color);"><span id="studentRecordName">Student</span> Records</h3>
+            <button onclick="hideModal('studentRecordsModal')" class="modal-close-btn">&times;</button>
+        </div>
+        
+        <div class="student-record-header">
+            <div id="studentAvatar" class="student-avatar">A</div>
+            <div class="student-avatar-details">
+                <p style="font-size: 1.2rem; font-weight: 600;" id="studentRecordId">ID: Loading...</p>
+                <p style="color: #7f8c8d;" id="studentRecordType">Type: Loading...</p>
+                <p class="score" id="studentRecordScore">Total Score: Loading...</p>
+            </div>
+        </div>
+
+        <h4 style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; color: var(--text-color);">Activity Score History</h4>
+        <div id="scoreHistory" class="student-record-history">
+            <p style="color: #7f8c8d; text-align: center; padding: 15px;">No detailed history available for this dummy user.</p>
+        </div>
+    </div>
+  </div>
+
+  <div id="qrGeneratorModal" class="modal-overlay qr-gen">
+    <div class="modal-dialog qr-gen-sm">
+        <div class="modal-header-content">
+            <h3 style="color: var(--secondary-color);">Share Resource via QR Code</h3>
+            <button onclick="hideModal('qrGeneratorModal')" class="modal-close-btn">&times;</button>
+        </div>
+
+        <p id="qrTitle" class="subtitle" style="text-align: center; margin-bottom: 15px;">QR Code for: [Resource Title]</p>
+        
+        <div class="qr-container">
+            <div id="qrCodeCanvas"></div>
+        </div>
+
+        <p style="font-size: 0.9rem; color: #7f8c8d; margin-bottom: 20px;">Scan this code to instantly access the resource on any mobile device. This link works for all users.</p>
+
+        <button onclick="customAlert('Downloading the QR Code image...')" class="action-button qr-download-btn">
+            <i class="fas fa-download"></i> Download QR Image
+        </button>
+    </div>
+  </div>
+
+  <!-- Load JavaScript -->
+  <script src="scripts/teacher-dashboard.js"></script>
+</body>
+</html>
