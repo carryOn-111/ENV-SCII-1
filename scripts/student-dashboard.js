@@ -90,17 +90,68 @@ function scrollCatalogue(containerId, direction) {
 
 /**
  * Handles the user logging out.
- * This function should redirect the user or clear authentication tokens.
+ * Updated to redirect to index.php (the teacher's dashboard).
  */
 function handleLogout() {
     customAlert('Logging out... Thank you for using EcoLearn!');
-    // In a real application, you would add Firebase/Auth logout logic here:
-    // auth.signOut().then(() => { window.location.href = '/login.html'; });
-    
-    // For simulation, we can just redirect to the teacher dashboard (index.html)
     setTimeout(() => {
-        window.location.href = 'index.html'; 
+        window.location.href = 'index.php'; // Renamed teacher dashboard to PHP
     }, 1500);
+}
+
+// ------------------------------------------------------------------
+// NEW QR CODE ACCESS LOGIC
+// ------------------------------------------------------------------
+
+/**
+ * Initiates the QR code access flow by showing the identity selection modal.
+ * This function would be called by the QR scanning page/logic, passing the resource link data.
+ * @param {number} resourceId - The ID of the lesson or activity.
+ * @param {string} resourceType - 'lesson' or 'activity'.
+ */
+function handleQRAccess(resourceId, resourceType) {
+    // 1. Set the resource details in the hidden form inputs
+    document.getElementById('anonResourceId').value = resourceId;
+    document.getElementById('anonResourceType').value = resourceType;
+
+    // 2. Simulate fetching resource title and update modal
+    const title = resourceType.charAt(0).toUpperCase() + resourceType.slice(1);
+    
+    // In a real application, you would fetch the title from the backend.
+    document.getElementById('qrResourceTitle').textContent = `Resource: ${title} ID ${resourceId}`;
+
+    // 3. Display the modal
+    showModal('qrLandingModal');
+    // Hide the previous modal if it was open
+    hideModal('qrScannerModal'); 
+}
+
+/**
+ * Processes the anonymous student's name entry and simulates content access.
+ */
+function processAnonymousAccess() {
+    const name = document.getElementById('anonName').value;
+    const resourceId = document.getElementById('anonResourceId').value;
+    const resourceType = document.getElementById('anonResourceType').value;
+
+    if (!name.trim()) {
+        customAlert("Please enter your name/initials to proceed anonymously.");
+        return;
+    }
+
+    // SIMULATED LOGIC:
+    // This is where a PHP endpoint would be called to:
+    // 1. Create a temporary 'Anonymous' user record with the provided 'name'.
+    // 2. Return an Anonymous Session ID.
+    
+    customAlert(`Success! Session started for Anonymous User: ${name}. Loading ${resourceType} ${resourceId}.`);
+    
+    // Example: Redirect to the content viewer page with temporary credentials
+    // window.location.href = `/view/resource.php?type=${resourceType}&id=${resourceId}&anon_name=${encodeURIComponent(name)}`;
+
+    // For now, hide modal and simulate content start
+    hideModal('qrLandingModal');
+    document.getElementById('anonName').value = ''; // Clear input
 }
 
 // --- Student-Specific Content Rendering ---
@@ -113,10 +164,9 @@ function loadStudentContent(section) {
   switch(section) {
     case 'dashboard':
         html = `
-            <h2>Welcome Back, [Student Name]! 👋</h2>
+            <h2>Welcome Back, [Student Name]! 窓</h2>
             <p class="subtitle">Quickly access lessons, check deadlines, or scan a code to start a new activity.</p>
             
-            <!-- 1. QR CODE FOCUS (Action Card) -->
             <div class="action-card qr-focus-card">
                 <h3>QR Code Quick Access</h3>
                 <button class="action-button primary" onclick="showModal('qrScannerModal')">
@@ -127,7 +177,6 @@ function loadStudentContent(section) {
                 </button>
             </div>
             
-            <!-- 2. STUDENT STATS GRID -->
             <div class="dashboard-grid">
                 <div class="stat-card">
                     <i class="fas fa-percent" style="color: #e67e22;"></i>
@@ -151,7 +200,6 @@ function loadStudentContent(section) {
                 </div>
             </div>
             
-            <!-- 3. UPCOMING DEADLINES (Activity Log Style) -->
             <div class="action-card dashboard-top-margin">
                 <h3>Upcoming Deadlines</h3>
                 <div class="activity-log">
@@ -187,19 +235,17 @@ function loadStudentContent(section) {
             <div class="lessons-container">
                 <div class="catalogue-header">
                     <div>
-                        <h2>Course Catalogue & Library 📚</h2>
+                        <h2>Course Catalogue & Library 答</h2>
                         <p class="subtitle">Explore all available environmental science lessons and recommended activities.</p>
                     </div>
-                    <!-- Smaller Search Bar -->
                     <div class="catalogue-search-bar">
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search lessons, activities..." onchange="customAlert('Searching for: ' + this.value)">
                     </div>
                 </div>
                 
-                <!-- 1. Trending Lessons Row -->
                 <div class="catalogue-row-section">
-                    <h3>🔥 Trending Lessons</h3>
+                    <h3>櫨 Trending Lessons</h3>
                     <div class="catalogue-slider">
                         <div class="scroll-arrow left" onclick="scrollCatalogue('trendingSlider', 'left')"><i class="fas fa-chevron-left"></i></div>
                         <div class="slider-container" id="trendingSlider">
@@ -243,7 +289,6 @@ function loadStudentContent(section) {
                                 <button class="action-small-btn view-btn" onclick="customAlert('Enrolling in course...')"><i class="fas fa-arrow-right"></i> Enroll Now</button>
                             </div>
                             
-                            <!-- Placeholder Lesson 1 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Lesson Placeholder 1')">
                                     <i class="fas fa-chalkboard-teacher"></i>
@@ -252,7 +297,6 @@ function loadStudentContent(section) {
                                 </div>
                             </div>
                             
-                            <!-- Placeholder Lesson 2 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Lesson Placeholder 2')">
                                     <i class="fas fa-chalkboard-teacher"></i>
@@ -261,7 +305,6 @@ function loadStudentContent(section) {
                                 </div>
                             </div>
                             
-                            <!-- Placeholder Lesson 3 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Lesson Placeholder 3')">
                                     <i class="fas fa-chalkboard-teacher"></i>
@@ -275,15 +318,13 @@ function loadStudentContent(section) {
                     </div>
                 </div>
                 
-                <!-- 2. Most Popular Activities Row -->
                 <div class="catalogue-row-section">
-                    <h3>🥇 Most Popular Activities</h3>
+                    <h3>･Most Popular Activities</h3>
                     <p class="subtitle catalogue-subtitle">Practice exercises frequently taken by your peers.</p>
                     <div class="catalogue-slider">
                         <div class="scroll-arrow left" onclick="scrollCatalogue('activitySlider', 'left')"><i class="fas fa-chevron-left"></i></div>
                         <div class="slider-container" id="activitySlider">
                             
-                            <!-- Activity Card (Quiz) -->
                             <div class="lesson-card status-published">
                                 <div class="lesson-header-status">
                                     <span class="status-badge published">Quiz</span>
@@ -297,7 +338,6 @@ function loadStudentContent(section) {
                                 <button class="action-small-btn view-btn" onclick="customAlert('Starting Quick Quiz...')"><i class="fas fa-play"></i> Start Quiz</button>
                             </div>
                             
-                            <!-- Activity Card (Simulation) -->
                             <div class="lesson-card status-recommended">
                                 <div class="lesson-header-status">
                                     <span class="status-badge recommended">Simulation</span>
@@ -311,7 +351,6 @@ function loadStudentContent(section) {
                                 <button class="action-small-btn edit-btn" onclick="customAlert('Launching simulation...')"><i class="fas fa-arrow-right"></i> Launch</button>
                             </div>
                             
-                            <!-- Placeholder Activity 1 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Activity Placeholder 1')">
                                     <i class="fas fa-seedling"></i>
@@ -320,7 +359,6 @@ function loadStudentContent(section) {
                                 </div>
                             </div>
                             
-                            <!-- Placeholder Activity 2 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Activity Placeholder 2')">
                                     <i class="fas fa-seedling"></i>
@@ -329,7 +367,6 @@ function loadStudentContent(section) {
                                 </div>
                             </div>
                             
-                            <!-- Placeholder Activity 3 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Activity Placeholder 3')">
                                     <i class="fas fa-seedling"></i>
@@ -343,9 +380,8 @@ function loadStudentContent(section) {
                     </div>
                 </div>
                 
-                <!-- 3. Newly Added Lessons Row -->
                 <div class="catalogue-row-section">
-                    <h3>✨ Newly Added</h3>
+                    <h3>笨ｨ Newly Added</h3>
                     <div class="catalogue-slider">
                         <div class="scroll-arrow left" onclick="scrollCatalogue('newSlider', 'left')"><i class="fas fa-chevron-left"></i></div>
                         <div class="slider-container" id="newSlider">
@@ -376,7 +412,6 @@ function loadStudentContent(section) {
                                 <button class="action-small-btn edit-btn" onclick="customAlert('Enrolling in course...')"><i class="fas fa-arrow-right"></i> Enroll Now</button>
                             </div>
 
-                            <!-- Placeholder Lesson 1 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Lesson Placeholder 1')">
                                     <i class="fas fa-plus"></i>
@@ -385,7 +420,6 @@ function loadStudentContent(section) {
                                 </div>
                             </div>
 
-                            <!-- Placeholder Lesson 2 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Lesson Placeholder 2')">
                                     <i class="fas fa-plus"></i>
@@ -394,7 +428,6 @@ function loadStudentContent(section) {
                                 </div>
                             </div>
 
-                            <!-- Placeholder Lesson 3 -->
                             <div class="lesson-card status-draft">
                                 <div class="lesson-placeholder" onclick="customAlert('Lesson Placeholder 3')">
                                     <i class="fas fa-plus"></i>
@@ -473,7 +506,6 @@ function loadStudentContent(section) {
                     <div class="lesson-list-panel">
                         <h3 style="margin-bottom: 15px;">Pending & Graded</h3>
                         <div id="activityGrid" class="lesson-grid"> 
-                            <!-- Activity Card (Due Soon) -->
                             <div class="lesson-card status-overdue">
                                 <div class="lesson-header-status">
                                     <span class="status-badge overdue">OVERDUE</span>
@@ -487,7 +519,6 @@ function loadStudentContent(section) {
                                 <button class="action-small-btn delete-btn" onclick="customAlert('Submitting late assignment...')"><i class="fas fa-paper-plane"></i> Submit Late</button>
                             </div>
 
-                            <!-- Activity Card (Pending Grade) -->
                             <div class="lesson-card status-submitted">
                                 <div class="lesson-header-status">
                                     <span class="status-badge submitted">Submitted</span>
@@ -501,7 +532,6 @@ function loadStudentContent(section) {
                                 <button class="action-small-btn publish-btn" onclick="customAlert('Viewing submitted file...')"><i class="fas fa-file-alt"></i> View Submission</button>
                             </div>
                             
-                            <!-- Activity Card (Graded) -->
                             <div class="lesson-card status-published">
                                 <div class="lesson-header-status">
                                     <span class="status-badge published">Graded: 90%</span>
@@ -529,7 +559,6 @@ function loadStudentContent(section) {
                 
                 <div class="dashboard-main-area"> 
         
-                    <!-- Left Panel: Score History -->
                     <div class="chart-card progress-score-list">
                         <h3 class="progress-score-header">Latest Activity Scores</h3>
                         <div class="leaderboard-list">
@@ -552,7 +581,6 @@ function loadStudentContent(section) {
                         </button>
                     </div>
                     
-                    <!-- Right Panel: Performance Trend Chart -->
                     <div class="chart-card chart-card-flex-2">
                         <h3 class="progress-score-header">Performance Trend (Last 5 Quizzes)</h3>
                         <div class="chart-container" style="height: 250px;"><canvas id="studentPerformanceChart"></canvas></div>
@@ -571,5 +599,16 @@ function loadStudentContent(section) {
 
 // Load the dashboard content immediately on page load
 window.onload = function() {
-    loadStudentContent('dashboard');
+    // Check for QR parameters in the URL (simulated QR scan)
+    const urlParams = new URLSearchParams(window.location.search);
+    const qrType = urlParams.get('type');
+    const qrId = urlParams.get('id');
+
+    if (qrType && qrId) {
+        // If parameters exist, launch the identity selection modal
+        handleQRAccess(qrId, qrType);
+    } else {
+        // Otherwise, load the regular dashboard
+        loadStudentContent('dashboard');
+    }
 }
